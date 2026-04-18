@@ -23,36 +23,36 @@
   }
 
   .top-area {
-    height: 34%;
+    height: 32%;
     background: linear-gradient(to bottom, #e8f6ff, #ffffff);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 10px 12px;
     border-bottom: 4px solid #cfe8ff;
   }
 
   .title {
-    font-size: clamp(26px, 4vw, 42px);
+    font-size: clamp(24px, 3.5vw, 40px);
     font-weight: bold;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   .equation {
-    font-size: clamp(44px, 8vw, 88px);
+    font-size: clamp(42px, 8vw, 86px);
     font-weight: bold;
     background: #fff8d9;
     border: 5px solid #f3d76b;
     border-radius: 20px;
-    padding: 18px 32px;
+    padding: 16px 28px;
     min-width: 320px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   }
 
   .message {
-    margin-top: 14px;
+    margin-top: 12px;
     font-size: clamp(22px, 3vw, 34px);
     font-weight: bold;
     color: #1a73e8;
@@ -61,24 +61,26 @@
   }
 
   .bottom-area {
-    height: 66%;
+    height: 68%;
     background: linear-gradient(to bottom, #dff4d8, #b7df9f);
-    padding: 12px;
+    padding: 10px 10px 12px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
   }
 
-  .controls {
+  .controls,
+  .mode-row,
+  .manual-panel {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 10px;
   }
 
   button {
-    font-size: clamp(18px, 2.2vw, 28px);
-    padding: 10px 18px;
+    font-size: clamp(17px, 2.1vw, 26px);
+    padding: 10px 16px;
     border: none;
     border-radius: 14px;
     font-weight: bold;
@@ -88,19 +90,50 @@
     box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   }
 
-  button.secondary {
-    background: #5c6bc0;
+  button.secondary { background: #5c6bc0; }
+  button.orange { background: #fb8c00; }
+  button.gray { background: #78909c; }
+  button.mode-btn {
+    background: #d9e8f8;
+    color: #234;
+    border: 3px solid #a9c7e8;
+    box-shadow: none;
   }
-
-  button.orange {
-    background: #fb8c00;
+  button.mode-btn.active {
+    background: #1e88e5;
+    color: white;
+    border-color: #1565c0;
   }
 
   .status {
     text-align: center;
     font-size: clamp(18px, 2.2vw, 28px);
     font-weight: bold;
-    margin-bottom: 10px;
+  }
+
+  .manual-wrap {
+    background: rgba(255,255,255,0.78);
+    border-radius: 16px;
+    padding: 8px;
+    display: none;
+  }
+  .manual-wrap.show {
+    display: block;
+  }
+
+  .manual-title {
+    text-align: center;
+    font-size: clamp(16px, 2vw, 24px);
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  .manual-panel button {
+    min-width: 58px;
+    padding: 10px 0;
+    font-size: clamp(18px, 2.2vw, 28px);
+    background: #8e24aa;
   }
 
   .board {
@@ -110,7 +143,7 @@
     gap: 14px;
     align-items: end;
     justify-items: center;
-    padding: 8px 10px 14px;
+    padding: 6px 8px 12px;
   }
 
   .hole {
@@ -142,7 +175,7 @@
     font-size: clamp(34px, 5vw, 58px);
     font-weight: bold;
     box-shadow: 0 8px 12px rgba(0,0,0,0.2);
-    transition: transform 0.16s ease;
+    transition: transform 0.18s ease;
     pointer-events: none;
   }
 
@@ -212,6 +245,9 @@
       width: 20vw;
       height: 13vw;
     }
+    .manual-panel button {
+      min-width: 52px;
+    }
   }
 </style>
 </head>
@@ -224,15 +260,26 @@
 </div>
 
 <div class="bottom-area">
+  <div class="mode-row">
+    <button id="autoModeBtn" class="mode-btn active">じどう</button>
+    <button id="manualModeBtn" class="mode-btn">てどう</button>
+  </div>
+
   <div class="controls">
     <button id="startBtn">スタート</button>
     <button id="pauseBtn" class="secondary">いったん とめる</button>
     <button id="nextBtn" class="orange">つぎへ</button>
     <button id="retryBtn" class="secondary">もういちど</button>
+    <button id="clearBtn" class="gray">けす</button>
   </div>
 
   <div class="status">
     もんだい <span id="currentIndex">1</span> / <span id="totalCount">10</span>
+  </div>
+
+  <div id="manualWrap" class="manual-wrap">
+    <div class="manual-title">てどうモード：きょういんが したの すうじを おすと もぐらが でます</div>
+    <div id="manualPanel" class="manual-panel"></div>
   </div>
 
   <div id="board" class="board"></div>
@@ -263,10 +310,11 @@ const problems = [
   { count: 4 }
 ];
 
+/* 前回より遅め */
 const HOLE_COUNT = 8;
-const SHOW_INTERVAL = 700;
-const SHOW_DURATION = 1100;
-const CORRECT_APPEAR_RATE = 0.35;
+const SHOW_INTERVAL = 1200;   // 自動で出る間隔（遅め）
+const SHOW_DURATION = 1600;   // 出ている時間（長め）
+const CORRECT_APPEAR_RATE = 0.28;
 
 const board = document.getElementById("board");
 const equation = document.getElementById("equation");
@@ -284,11 +332,18 @@ const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const nextBtn = document.getElementById("nextBtn");
 const retryBtn = document.getElementById("retryBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+const autoModeBtn = document.getElementById("autoModeBtn");
+const manualModeBtn = document.getElementById("manualModeBtn");
+const manualWrap = document.getElementById("manualWrap");
+const manualPanel = document.getElementById("manualPanel");
 
 let currentProblemIndex = 0;
 let spawnTimer = null;
 let running = false;
 let holes = [];
+let mode = "auto"; // auto / manual
 
 function shuffle(array) {
   const arr = [...array];
@@ -326,6 +381,19 @@ function buildBoard() {
   }
 }
 
+function buildManualPanel() {
+  manualPanel.innerHTML = "";
+  for (let n = 0; n <= 10; n++) {
+    const btn = document.createElement("button");
+    btn.textContent = n;
+    btn.addEventListener("click", () => {
+      if (mode !== "manual") return;
+      spawnSpecificNumber(n);
+    });
+    manualPanel.appendChild(btn);
+  }
+}
+
 function loadProblem(index) {
   currentProblemIndex = index;
   const p = problems[currentProblemIndex];
@@ -337,6 +405,7 @@ function loadProblem(index) {
 
   hideOverlay();
   clearMoles();
+  pauseGame();
 }
 
 function clearMoles() {
@@ -349,6 +418,11 @@ function clearMoles() {
 }
 
 function startGame() {
+  if (mode === "manual") {
+    message.textContent = "きょういんが したの すうじを おしてください";
+    running = false;
+    return;
+  }
   if (running) return;
   running = true;
   spawnLoop();
@@ -364,14 +438,22 @@ function pauseGame() {
 function retryProblem() {
   pauseGame();
   loadProblem(currentProblemIndex);
-  startGame();
+  if (mode === "auto") {
+    startGame();
+  } else {
+    message.textContent = "きょういんが したの すうじを おしてください";
+  }
 }
 
 function nextProblem() {
   pauseGame();
   if (currentProblemIndex < problems.length - 1) {
     loadProblem(currentProblemIndex + 1);
-    startGame();
+    if (mode === "auto") {
+      startGame();
+    } else {
+      message.textContent = "きょういんが したの すうじを おしてください";
+    }
   } else {
     showOverlay("おしまい！", "ぜんぶ できました！");
   }
@@ -385,18 +467,41 @@ function getWrongNumbers(target) {
   return shuffle(nums);
 }
 
-function spawnLoop() {
+function findFreeHole() {
   const freeHoles = holes.filter(h => !h.busy);
-  if (freeHoles.length === 0) return;
+  if (freeHoles.length === 0) return null;
+  return freeHoles[Math.floor(Math.random() * freeHoles.length)];
+}
+
+function showNumberInHole(holeObj, value, duration = SHOW_DURATION) {
+  if (!holeObj) return;
+  const mole = holeObj.mole;
+
+  holeObj.busy = true;
+  clearTimeout(holeObj.timer);
+  mole.className = "mole";
+  mole.textContent = value;
+  mole.classList.add("show");
+
+  holeObj.timer = setTimeout(() => {
+    mole.className = "mole";
+    mole.textContent = "";
+    holeObj.busy = false;
+  }, duration);
+}
+
+function spawnSpecificNumber(value) {
+  const hole = findFreeHole();
+  if (!hole) return;
+  showNumberInHole(hole, value, SHOW_DURATION);
+}
+
+function spawnLoop() {
+  const hole = findFreeHole();
+  if (!hole) return;
 
   const target = correctAnswer();
   const wrongs = getWrongNumbers(target);
-
-  const hole = freeHoles[Math.floor(Math.random() * freeHoles.length)];
-  const mole = hole.mole;
-
-  hole.busy = true;
-  mole.className = "mole";
 
   let value;
   if (Math.random() < CORRECT_APPEAR_RATE) {
@@ -405,14 +510,7 @@ function spawnLoop() {
     value = wrongs[Math.floor(Math.random() * wrongs.length)];
   }
 
-  mole.textContent = value;
-  mole.classList.add("show");
-
-  hole.timer = setTimeout(() => {
-    mole.className = "mole";
-    mole.textContent = "";
-    hole.busy = false;
-  }, SHOW_DURATION);
+  showNumberInHole(hole, value, SHOW_DURATION);
 }
 
 function handleTap(mole) {
@@ -433,9 +531,32 @@ function handleTap(mole) {
     message.textContent = "ちがうよ";
     setTimeout(() => {
       if (!overlay.classList.contains("show")) {
-        message.textContent = "したから こたえを たたこう！";
+        if (mode === "manual") {
+          message.textContent = "きょういんが したの すうじを おしてください";
+        } else {
+          message.textContent = "したから こたえを たたこう！";
+        }
       }
     }, 500);
+  }
+}
+
+function setMode(newMode) {
+  mode = newMode;
+  pauseGame();
+  clearMoles();
+  hideOverlay();
+
+  if (mode === "auto") {
+    autoModeBtn.classList.add("active");
+    manualModeBtn.classList.remove("active");
+    manualWrap.classList.remove("show");
+    message.textContent = "したから こたえを たたこう！";
+  } else {
+    manualModeBtn.classList.add("active");
+    autoModeBtn.classList.remove("active");
+    manualWrap.classList.add("show");
+    message.textContent = "きょういんが したの すうじを おしてください";
   }
 }
 
@@ -453,17 +574,25 @@ startBtn.addEventListener("click", startGame);
 pauseBtn.addEventListener("click", pauseGame);
 nextBtn.addEventListener("click", nextProblem);
 retryBtn.addEventListener("click", retryProblem);
+clearBtn.addEventListener("click", clearMoles);
+
+autoModeBtn.addEventListener("click", () => setMode("auto"));
+manualModeBtn.addEventListener("click", () => setMode("manual"));
+
 overlayNextBtn.addEventListener("click", () => {
   hideOverlay();
   nextProblem();
 });
+
 overlayRetryBtn.addEventListener("click", () => {
   hideOverlay();
   retryProblem();
 });
 
 buildBoard();
+buildManualPanel();
 loadProblem(0);
+setMode("auto");
 </script>
 
 </body>
