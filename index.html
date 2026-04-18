@@ -113,6 +113,9 @@
     flex-wrap: wrap;
     align-items: center;
   }
+  .speed-box.hide {
+    display: none;
+  }
   .speed-item {
     display: flex;
     align-items: center;
@@ -140,9 +143,11 @@
   }
   .manual-panel button {
     min-width: 58px;
-    padding: 10px 0;
-    font-size: clamp(18px, 2.2vw, 28px);
+    min-height: 58px;
+    padding: 0;
+    font-size: 0;
     background: #8e24aa;
+    color: transparent;
   }
   .board {
     flex: 1;
@@ -243,6 +248,7 @@
     }
     .manual-panel button {
       min-width: 52px;
+      min-height: 52px;
     }
     .speed-item input[type="range"] {
       width: 150px;
@@ -276,7 +282,7 @@
     もんだい <span id="currentIndex">1</span> / <span id="totalCount">10</span>
   </div>
 
-  <div class="speed-box">
+  <div id="speedBox" class="speed-box">
     <div class="speed-item">
       自動のはやさ
       <input id="autoSpeedSlider" type="range" min="700" max="2500" step="100" value="1500">
@@ -285,7 +291,7 @@
   </div>
 
   <div id="manualWrap" class="manual-wrap">
-    <div class="manual-title">手動モード：教員が数字を押すと、その数字が出ます</div>
+    <div class="manual-title">手動モード</div>
     <div id="manualPanel" class="manual-panel"></div>
   </div>
 
@@ -343,6 +349,7 @@ const autoModeBtn = document.getElementById("autoModeBtn");
 const manualModeBtn = document.getElementById("manualModeBtn");
 const manualWrap = document.getElementById("manualWrap");
 const manualPanel = document.getElementById("manualPanel");
+const speedBox = document.getElementById("speedBox");
 
 const autoSpeedSlider = document.getElementById("autoSpeedSlider");
 const autoSpeedValue = document.getElementById("autoSpeedValue");
@@ -405,10 +412,11 @@ function buildManualPanel() {
   manualPanel.innerHTML = "";
   for (let n = 0; n <= 10; n++) {
     const btn = document.createElement("button");
-    btn.textContent = n;
+    btn.setAttribute("aria-label", String(n));
+    btn.dataset.value = String(n);
     btn.addEventListener("click", () => {
       if (mode !== "manual") return;
-      spawnSpecificNumber(n);
+      spawnSpecificNumber(Number(btn.dataset.value));
     });
     manualPanel.appendChild(btn);
   }
@@ -427,7 +435,7 @@ function loadProblem(index) {
   pauseGame();
 
   if (mode === "manual") {
-    message.textContent = "教員が下の数字を押してください";
+    message.textContent = "手動モード";
   } else {
     message.textContent = "したから こたえを たたこう！";
   }
@@ -444,7 +452,7 @@ function clearMoles() {
 
 function startGame() {
   if (mode === "manual") {
-    message.textContent = "教員が下の数字を押してください";
+    message.textContent = "手動モード";
     running = false;
     return;
   }
@@ -563,7 +571,7 @@ function handleTap(mole) {
     setTimeout(() => {
       if (!overlay.classList.contains("show")) {
         if (mode === "manual") {
-          message.textContent = "教員が下の数字を押してください";
+          message.textContent = "手動モード";
         } else {
           message.textContent = "したから こたえを たたこう！";
         }
@@ -582,12 +590,14 @@ function setMode(newMode) {
     autoModeBtn.classList.add("active");
     manualModeBtn.classList.remove("active");
     manualWrap.classList.remove("show");
+    speedBox.classList.remove("hide");
     message.textContent = "したから こたえを たたこう！";
   } else {
     manualModeBtn.classList.add("active");
     autoModeBtn.classList.remove("active");
     manualWrap.classList.add("show");
-    message.textContent = "教員が下の数字を押してください";
+    speedBox.classList.add("hide");
+    message.textContent = "手動モード";
   }
 }
 
