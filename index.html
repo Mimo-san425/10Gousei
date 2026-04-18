@@ -20,6 +20,7 @@
     display: flex;
     flex-direction: column;
   }
+
   .top-area {
     height: 30%;
     background: linear-gradient(to bottom, #e8f6ff, #ffffff);
@@ -30,11 +31,13 @@
     padding: 10px 12px;
     border-bottom: 4px solid #cfe8ff;
   }
+
   .title {
     font-size: clamp(24px, 3.5vw, 40px);
     font-weight: bold;
     margin-bottom: 10px;
   }
+
   .equation {
     font-size: clamp(42px, 8vw, 86px);
     font-weight: bold;
@@ -46,6 +49,7 @@
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   }
+
   .message {
     margin-top: 12px;
     font-size: clamp(22px, 3vw, 34px);
@@ -54,6 +58,7 @@
     min-height: 1.5em;
     text-align: center;
   }
+
   .bottom-area {
     height: 70%;
     background: linear-gradient(to bottom, #dff4d8, #b7df9f);
@@ -62,14 +67,15 @@
     flex-direction: column;
     gap: 8px;
   }
+
   .mode-row,
-  .controls,
-  .manual-panel {
+  .controls {
     display: flex;
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
   }
+
   button {
     font-size: clamp(17px, 2.1vw, 26px);
     padding: 10px 16px;
@@ -81,59 +87,42 @@
     color: white;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   }
+
   button.secondary { background: #5c6bc0; }
   button.orange { background: #fb8c00; }
   button.gray { background: #78909c; }
+  button.purple { background: #8e24aa; }
+
   button.mode-btn {
     background: #d9e8f8;
     color: #234;
     border: 3px solid #a9c7e8;
     box-shadow: none;
   }
+
   button.mode-btn.active {
     background: #1e88e5;
     color: white;
     border-color: #1565c0;
   }
+
   .status {
     text-align: center;
     font-size: clamp(18px, 2.2vw, 28px);
     font-weight: bold;
   }
-  .speed-box,
+
   .manual-wrap {
     background: rgba(255,255,255,0.82);
     border-radius: 16px;
-    padding: 8px 10px;
-  }
-  .speed-box {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .speed-box.hide {
+    padding: 10px;
     display: none;
   }
-  .speed-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: clamp(15px, 1.8vw, 22px);
-    font-weight: bold;
-    color: #333;
-  }
-  .speed-item input[type="range"] {
-    width: 220px;
-    accent-color: #1e88e5;
-  }
-  .manual-wrap {
-    display: none;
-  }
+
   .manual-wrap.show {
     display: block;
   }
+
   .manual-title {
     text-align: center;
     font-size: clamp(16px, 2vw, 24px);
@@ -141,14 +130,29 @@
     margin-bottom: 8px;
     color: #333;
   }
-  .manual-panel button {
-    min-width: 58px;
-    min-height: 58px;
-    padding: 0;
-    font-size: 0;
-    background: #8e24aa;
-    color: transparent;
+
+  .manual-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
   }
+
+  .manual-speed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: clamp(15px, 1.8vw, 22px);
+    font-weight: bold;
+    color: #333;
+  }
+
+  .manual-speed input[type="range"] {
+    width: 220px;
+    accent-color: #8e24aa;
+  }
+
   .board {
     flex: 1;
     display: grid;
@@ -158,6 +162,7 @@
     justify-items: center;
     padding: 6px 8px 12px;
   }
+
   .hole {
     width: min(20vw, 150px);
     height: min(14vw, 96px);
@@ -168,6 +173,7 @@
     overflow: visible;
     box-shadow: inset 0 8px 10px rgba(0,0,0,0.3);
   }
+
   .mole {
     position: absolute;
     left: 50%;
@@ -189,18 +195,22 @@
     transition: transform 0.18s ease;
     pointer-events: none;
   }
+
   .mole.show {
     transform: translate(-50%, -18%);
     pointer-events: auto;
   }
+
   .mole.correct {
     background: #d9ffd9;
     border-color: #2e7d32;
   }
+
   .mole.wrong {
     background: #ffd9d9;
     border-color: #c62828;
   }
+
   .overlay {
     position: fixed;
     inset: 0;
@@ -210,9 +220,11 @@
     justify-content: center;
     z-index: 50;
   }
+
   .overlay.show {
     display: flex;
   }
+
   .overlay-card {
     background: white;
     border-radius: 20px;
@@ -221,22 +233,26 @@
     text-align: center;
     box-shadow: 0 12px 24px rgba(0,0,0,0.25);
   }
+
   .overlay-title {
     font-size: clamp(34px, 6vw, 60px);
     font-weight: bold;
     margin-bottom: 12px;
     color: #e65100;
   }
+
   .overlay-text {
     font-size: clamp(22px, 3vw, 32px);
     margin-bottom: 18px;
   }
+
   .overlay-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
   }
+
   @media (max-width: 800px) {
     .board {
       grid-template-columns: repeat(4, 1fr);
@@ -246,11 +262,7 @@
       width: 20vw;
       height: 13vw;
     }
-    .manual-panel button {
-      min-width: 52px;
-      min-height: 52px;
-    }
-    .speed-item input[type="range"] {
+    .manual-speed input[type="range"] {
       width: 150px;
     }
   }
@@ -282,17 +294,16 @@
     もんだい <span id="currentIndex">1</span> / <span id="totalCount">10</span>
   </div>
 
-  <div id="speedBox" class="speed-box">
-    <div class="speed-item">
-      自動のはやさ
-      <input id="autoSpeedSlider" type="range" min="700" max="2500" step="100" value="1500">
-      <span id="autoSpeedValue">1500ms</span>
-    </div>
-  </div>
-
   <div id="manualWrap" class="manual-wrap">
     <div class="manual-title">手動モード</div>
-    <div id="manualPanel" class="manual-panel"></div>
+    <div class="manual-controls">
+      <button id="manualShowBtn" class="purple">出す</button>
+      <div class="manual-speed">
+        表示時間
+        <input id="manualDurationSlider" type="range" min="800" max="3000" step="100" value="1600">
+        <span id="manualDurationValue">1600ms</span>
+      </div>
+    </div>
   </div>
 
   <div id="board" class="board"></div>
@@ -325,7 +336,7 @@ const problems = [
 
 const HOLE_COUNT = 8;
 const CORRECT_APPEAR_RATE = 0.28;
-const MANUAL_SHOW_DURATION = 1600;
+const AUTO_INTERVAL = 1500;
 
 const board = document.getElementById("board");
 const equation = document.getElementById("equation");
@@ -348,11 +359,9 @@ const clearBtn = document.getElementById("clearBtn");
 const autoModeBtn = document.getElementById("autoModeBtn");
 const manualModeBtn = document.getElementById("manualModeBtn");
 const manualWrap = document.getElementById("manualWrap");
-const manualPanel = document.getElementById("manualPanel");
-const speedBox = document.getElementById("speedBox");
-
-const autoSpeedSlider = document.getElementById("autoSpeedSlider");
-const autoSpeedValue = document.getElementById("autoSpeedValue");
+const manualShowBtn = document.getElementById("manualShowBtn");
+const manualDurationSlider = document.getElementById("manualDurationSlider");
+const manualDurationValue = document.getElementById("manualDurationValue");
 
 let currentProblemIndex = 0;
 let spawnTimer = null;
@@ -360,16 +369,12 @@ let running = false;
 let holes = [];
 let mode = "auto";
 
-function getAutoInterval() {
-  return Number(autoSpeedSlider.value);
+function getManualDuration() {
+  return Number(manualDurationSlider.value);
 }
 
-function getAutoDuration() {
-  return Math.max(Number(autoSpeedSlider.value) + 400, 1100);
-}
-
-function updateSpeedLabel() {
-  autoSpeedValue.textContent = `${autoSpeedSlider.value}ms`;
+function updateManualDurationLabel() {
+  manualDurationValue.textContent = `${manualDurationSlider.value}ms`;
 }
 
 function shuffle(array) {
@@ -408,20 +413,6 @@ function buildBoard() {
   }
 }
 
-function buildManualPanel() {
-  manualPanel.innerHTML = "";
-  for (let n = 0; n <= 10; n++) {
-    const btn = document.createElement("button");
-    btn.setAttribute("aria-label", String(n));
-    btn.dataset.value = String(n);
-    btn.addEventListener("click", () => {
-      if (mode !== "manual") return;
-      spawnSpecificNumber(Number(btn.dataset.value));
-    });
-    manualPanel.appendChild(btn);
-  }
-}
-
 function loadProblem(index) {
   currentProblemIndex = index;
   const p = problems[currentProblemIndex];
@@ -435,7 +426,7 @@ function loadProblem(index) {
   pauseGame();
 
   if (mode === "manual") {
-    message.textContent = "手動モード";
+    message.textContent = "出す をおしてください";
   } else {
     message.textContent = "したから こたえを たたこう！";
   }
@@ -452,7 +443,7 @@ function clearMoles() {
 
 function startGame() {
   if (mode === "manual") {
-    message.textContent = "手動モード";
+    message.textContent = "出す をおしてください";
     running = false;
     return;
   }
@@ -469,7 +460,7 @@ function restartAutoTimer() {
   spawnTimer = setInterval(() => {
     if (mode !== "auto" || !running) return;
     spawnLoop();
-  }, getAutoInterval());
+  }, AUTO_INTERVAL);
 }
 
 function pauseGame() {
@@ -532,7 +523,7 @@ function showNumberInHole(holeObj, value, duration) {
 function spawnSpecificNumber(value) {
   const hole = findFreeHole();
   if (!hole) return;
-  showNumberInHole(hole, value, MANUAL_SHOW_DURATION);
+  showNumberInHole(hole, value, getManualDuration());
 }
 
 function spawnLoop() {
@@ -549,7 +540,7 @@ function spawnLoop() {
     value = wrongs[Math.floor(Math.random() * wrongs.length)];
   }
 
-  showNumberInHole(hole, value, getAutoDuration());
+  showNumberInHole(hole, value, 1900);
 }
 
 function handleTap(mole) {
@@ -571,7 +562,7 @@ function handleTap(mole) {
     setTimeout(() => {
       if (!overlay.classList.contains("show")) {
         if (mode === "manual") {
-          message.textContent = "手動モード";
+          message.textContent = "出す をおしてください";
         } else {
           message.textContent = "したから こたえを たたこう！";
         }
@@ -590,14 +581,12 @@ function setMode(newMode) {
     autoModeBtn.classList.add("active");
     manualModeBtn.classList.remove("active");
     manualWrap.classList.remove("show");
-    speedBox.classList.remove("hide");
     message.textContent = "したから こたえを たたこう！";
   } else {
     manualModeBtn.classList.add("active");
     autoModeBtn.classList.remove("active");
     manualWrap.classList.add("show");
-    speedBox.classList.add("hide");
-    message.textContent = "手動モード";
+    message.textContent = "出す をおしてください";
   }
 }
 
@@ -620,6 +609,13 @@ clearBtn.addEventListener("click", clearMoles);
 autoModeBtn.addEventListener("click", () => setMode("auto"));
 manualModeBtn.addEventListener("click", () => setMode("manual"));
 
+manualShowBtn.addEventListener("click", () => {
+  if (mode !== "manual") return;
+  spawnSpecificNumber(correctAnswer());
+});
+
+manualDurationSlider.addEventListener("input", updateManualDurationLabel);
+
 overlayNextBtn.addEventListener("click", () => {
   hideOverlay();
   nextProblem();
@@ -629,16 +625,8 @@ overlayRetryBtn.addEventListener("click", () => {
   retryProblem();
 });
 
-autoSpeedSlider.addEventListener("input", () => {
-  updateSpeedLabel();
-  if (mode === "auto" && running) {
-    restartAutoTimer();
-  }
-});
-
 buildBoard();
-buildManualPanel();
-updateSpeedLabel();
+updateManualDurationLabel();
 loadProblem(0);
 setMode("auto");
 </script>
